@@ -1,3 +1,54 @@
+<?php
+include("../../db.php");
+// Insertar Datos
+if ($_POST) {
+    //print_r($_POST);
+    //print_r(($_FILES));
+
+    // Recolectamos los datos del metodo POST
+    $primernombre = (isset($_POST["primernombre"]) ? $_POST["primernombre"] : "");
+    $segundonombre = (isset($_POST["segundonombre"]) ? $_POST["segundonombre"] : "");
+    $primerapellido = (isset($_POST["primerapellido"]) ? $_POST["primerapellido"] : "");
+    $segundoapellido = (isset($_POST["segundoapellido"]) ? $_POST["segundoapellido"] : "");
+
+    $foto = (isset($_FILES["foto"]['name']) ? $_FILES["foto"]['name'] : "");
+    $cv = (isset($_FILES["cv"]['name']) ? $_FILES["cv"]['name'] : "");
+
+
+    $idpuesto = (isset($_POST["idpuesto"]) ? $_POST["idpuesto"] : "");
+    $fechadeingreso = (isset($_POST["fechadeingreso"]) ? $_POST["fechadeingreso"] : "");
+    // Preparar la inserccion de los datos
+    $sentencia = $conexion->prepare("INSERT INTO tbl_empleados (id, primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,foto,cv,id_puesto, fecha_ingreso ) VALUES (null, :primernombre,:segundonombre,:primerapellido,:segundoapellido,:foto,:cv,:idpuesto,:fechadeingreso)");
+
+
+    // Asignando los valores que vienen del metodo POST
+    $sentencia->bindParam(":primernombre", $primernombre);
+    $sentencia->bindParam(":segundonombre", $segundonombre);
+    $sentencia->bindParam(":primerapellido", $primerapellido);
+    $sentencia->bindParam(":segundoapellido", $segundoapellido);
+    $sentencia->bindParam(":foto", $foto);
+    $sentencia->bindParam(":cv", $cv);
+    $sentencia->bindParam(":idpuesto", $idpuesto);
+    $sentencia->bindParam(":fechadeingreso", $fechadeingreso);
+
+    $sentencia->execute();
+
+
+
+
+    header("Location:index.php");
+}
+
+//Busca los puestos.
+$sentencia = $conexion->prepare("SELECT * FROM tbl_puestos");
+$sentencia->execute();
+$lista_tbl_puestos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+
+?>
+
+
+
+
 <?php include("../../templates/header.php") ?>
 
 <br />
@@ -32,13 +83,16 @@
                 <input type="file" class="form-control" name="cv" id="cv" aria-describedby="helpId" placeholder="CV">
             </div>
             <div class="mb-3">
+
                 <label for="idpuesto" class="form-label">Puesto:</label>
                 <select class="form-select form-select-lg" name="idpuesto" id="idpuesto">
-                    <option selected>Select one</option>
-                    <option value="">New Delhi</option>
-                    <option value="">Istanbul</option>
-                    <option value="">Jakarta</option>
+                    <option selected>Selecione una Opción</option>
+                    <?php foreach ($lista_tbl_puestos as $registro) { ?>
+                        <option value="<?php echo $registro['id'] ?>"><?php echo $registro['nombre_puesto'] ?></option>
+                    <?php } ?>
                 </select>
+
+
             </div>
             <div class="mb-3">
                 <label for="fechadeingreso" class="form-label">Fecha de Ingreso</label>

@@ -3,3 +3,5 @@
 
 #Ignora archicos configuracion Prepros
 prepros.config
+
+._app.sql

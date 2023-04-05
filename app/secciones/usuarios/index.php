@@ -1,3 +1,25 @@
+<?php
+include("../../db.php");
+
+// ELiminar Datos
+if (isset($_GET['txtId'])) {
+    $txtId = (isset($_GET['txtId'])) ? $_GET['txtId'] : "";
+    $sentencia = $conexion->prepare("DELETE FROM tbl_usuarios WHERE id=:id");
+    $sentencia->bindParam(":id", $txtId);
+    $sentencia->execute();
+    header("Location:index.php");
+}
+
+
+// Buscar Datos
+$sentencia = $conexion->prepare("SELECT * FROM tbl_usuarios");
+$sentencia->execute();
+$lista_tbl_usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
+//print_r($lista_tbl_puestos);
+
+
+?>
+
 <?php include("../../templates/header.php") ?>
 <br>
 <div class="card">
@@ -21,16 +43,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="">
-                        <td scope="row">01</td>
-                        <td>olvedo</td>
-                        <td>***</td>
-                        <td>olvedo@olvedo.com</td>
-                        <td>
-                            <input name="btneditar" id="btneditar" class="btn btn-info" type="button" value="Editar">
-                            <input name="btneliminar" id="btneliminar" class="btn btn-danger" type="button" value="Eliminar">
-                        </td>
-                    </tr>
+                    <?php foreach ($lista_tbl_usuarios as $registro) { ?>
+                        <tr class="">
+                            <td scope="row"><?php echo $registro['id']; ?></td>
+                            <td><?php echo $registro['usuario']; ?></td>
+                            <td>***</td>
+                            <td><?php echo $registro['correo']; ?></td>
+                            <td>
+                                <a class="btn btn-info" href="editar.php?txtId= <?php echo $registro['id']; ?>" role="button">Editar</a>
+                                <a class="btn btn-danger" href="index.php?txtId= <?php echo $registro['id']; ?>" role="button">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php  } ?>
 
                 </tbody>
             </table>

@@ -1,3 +1,26 @@
+<?php
+include("../../db.php");
+// Insertar Datos
+if ($_POST) {
+    //print_r($_POST);
+
+    // Recolectamos los datos del metodo POST
+    $usuario = (isset($_POST["usuario"]) ? $_POST["usuario"] : "");
+    $pass = (isset($_POST["password"]) ? $_POST["password"] : "");
+    $correo = (isset($_POST["correo"]) ? $_POST["correo"] : "");
+    // Preparar la inserccion de los datos
+    $sentencia = $conexion->prepare("INSERT INTO tbl_usuarios (id, usuario,pass,correo) VALUES (null, :usuario,:pass,:correo)");
+
+    // Asignando los valores que tienen uso de variables
+    $sentencia->bindParam(":usuario", $usuario);
+    $sentencia->bindParam(":correo", $correo);
+    $sentencia->bindParam(":pass", $pass);
+    $sentencia->execute();
+    header("Location:index.php");
+}
+
+?>
+
 <?php include("../../templates/header.php") ?>
 <br />
 <div class="card">
