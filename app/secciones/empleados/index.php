@@ -4,11 +4,38 @@ include("../../db.php");
 // ELiminar Datos
 if (isset($_GET['txtId'])) {
     $txtId = (isset($_GET['txtId'])) ? $_GET['txtId'] : "";
+
+    //Buscar el archivo relacionado
+    $sentencia = $conexion->prepare("SELECT foto, cv FROM tbl_empleados WHERE id=:id");
+    $sentencia->bindParam(":id", $txtId);
+    $sentencia->execute();
+    $registro_recuperado = $sentencia->fetch(PDO::FETCH_LAZY);
+    print_r($registro_recuperado);
+
+    //Borrado de archivo foto
+    if (isset($registro_recuperado["foto"]) && $registro_recuperado["foto"] != "") {
+        if (file_exists("fotos_empleados/" . $registro_recuperado["foto"])) { // preguntamos si el archivo existe en la carpeta
+            unlink("fotos_empleados/" . $registro_recuperado["foto"]); //borramos el archivo en la carpeta
+
+        }
+    }
+    //Borrado archivo pdf
+    if (isset($registro_recuperado["cv"]) && $registro_recuperado["cv"] != "") {
+        if (file_exists("cv_empleados/" . $registro_recuperado["cv"])) { // preguntamos si el archivo existe en la carpeta
+            unlink("cv_empleados/" . $registro_recuperado["cv"]); //borramos el archivo en la carpeta
+
+        }
+    }
+
+
+
+
     $sentencia = $conexion->prepare("DELETE FROM tbl_empleados WHERE id=:id");
     $sentencia->bindParam(":id", $txtId);
     $sentencia->execute();
     header("Location:index.php");
 }
+
 
 
 // Buscar Datos
@@ -54,7 +81,12 @@ $lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                                 <?php echo $registro['primer_apellido'] ?>
                                 <?php echo $registro['segundo_apellido'] ?>
                             </td>
-                            <td><?php echo $registro['foto'] ?></td>
+                            <td>
+                                <img width="50" src="<?php echo "fotos_empleados/" . $registro['foto']; ?>" class="img-fluid rounded" alt="">
+
+
+
+                            </td>
                             <td><?php echo $registro['cv'] ?></td>
                             <td><?php echo $registro['puesto'] ?></td>
                             <td><?php echo $registro['fecha_ingreso'] ?></td>

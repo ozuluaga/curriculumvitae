@@ -14,7 +14,6 @@ if ($_POST) {
     $foto = (isset($_FILES["foto"]['name']) ? $_FILES["foto"]['name'] : "");
     $cv = (isset($_FILES["cv"]['name']) ? $_FILES["cv"]['name'] : "");
 
-
     $idpuesto = (isset($_POST["idpuesto"]) ? $_POST["idpuesto"] : "");
     $fechadeingreso = (isset($_POST["fechadeingreso"]) ? $_POST["fechadeingreso"] : "");
     // Preparar la inserccion de los datos
@@ -26,16 +25,39 @@ if ($_POST) {
     $sentencia->bindParam(":segundonombre", $segundonombre);
     $sentencia->bindParam(":primerapellido", $primerapellido);
     $sentencia->bindParam(":segundoapellido", $segundoapellido);
-    $sentencia->bindParam(":foto", $foto);
-    $sentencia->bindParam(":cv", $cv);
+
+    //Subir Foto
+    $fecha_ = new DateTime(); //Obtener el tiempo
+    $nombreArchivo_foto = ($foto != '') ? $fecha_->getTimestamp() . "_" . $_FILES["foto"]['name'] : ""; //Armar el nombre del archivo para que nose sobrescriba con otro
+    $tmp_foto = $_FILES["foto"]['tmp_name']; // utilizar un archivo temporal
+
+    if ($tmp_foto != '') {
+        move_uploaded_file($tmp_foto,  "fotos_empleados/" . $nombreArchivo_foto); // para mover el archivo a un nuevo destino
+        // print_r(move_uploaded_file($tmp_foto, "fotos_empleados/" . $nombreArchivo_foto));
+        //print_r($_FILES);
+        // print_r($_POST);
+    }
+    $sentencia->bindParam(":foto", $nombreArchivo_foto); // actualizamos la base datos ese nombre
+
+    // Subir Archivo
+    $nombreArchivo_cv = ($cv != '') ? $fecha_->getTimestamp() . "_" . $_FILES["cv"]['name'] : ""; //Armar el nombre del archivo para que nose sobrescriba con otro
+    $tmp_cv = $_FILES["cv"]['tmp_name']; // utilizar un archivo temporal
+
+    if ($tmp_cv != '') {
+        move_uploaded_file($tmp_cv,  "cv_empleados/" . $nombreArchivo_cv); // para mover el archivo a un nuevo destino
+
+    }
+
+
+
+    $sentencia->bindParam(":cv", $nombreArchivo_cv);
     $sentencia->bindParam(":idpuesto", $idpuesto);
     $sentencia->bindParam(":fechadeingreso", $fechadeingreso);
 
+
     $sentencia->execute();
-
-
-
-
+    //print_r($nombreArchivo_foto);
+    //print_r($sentencia);
     header("Location:index.php");
 }
 
@@ -75,6 +97,9 @@ $lista_tbl_puestos = $sentencia->fetchAll(PDO::FETCH_ASSOC);
                 <input type="text" class="form-control" name="segundoapellido" id="segundoapellido" aria-describedby="helpId" placeholder="Segundo Apellido">
             </div>
             <div class="mb-3">
+
+
+
                 <label for="foto" class="form-label">Foto:</label>
                 <input type="file" class="form-control" name="foto" id="foto" aria-describedby="helpId" placeholder="Foto">
             </div>

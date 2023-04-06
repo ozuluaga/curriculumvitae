@@ -1,5 +1,6 @@
 <?php
 $url_base = "http://localhost:8080/curriculumvitae/app/"
+//$url_base = "http://pruebavitae.byethost9.com/"
 ?>
 
 <!doctype html>
