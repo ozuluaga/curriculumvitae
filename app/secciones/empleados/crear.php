@@ -58,7 +58,9 @@ if ($_POST) {
     $sentencia->execute();
     //print_r($nombreArchivo_foto);
     //print_r($sentencia);
-    header("Location:index.php");
+    //header("Location:index.php");
+    $mensaje = "Registro Creado";
+    header("Location:index.php?mensaje=" . $mensaje);
 }
 
 //Busca los puestos.

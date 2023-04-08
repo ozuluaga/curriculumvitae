@@ -24,7 +24,8 @@ if ($_POST) {
     $sentencia->bindParam(":nombredelpuesto", $nombredelpuesto);
     $sentencia->bindParam(":id", $txtId);
     $sentencia->execute();
-    header("Location:index.php");
+    $mensaje = "Resgistro Actualizado"; //Asigno mensaje
+    header("Location:index.php?mensaje=" . $mensaje); //redirecciono y envio variable por url con el mensaje
 }
 
 

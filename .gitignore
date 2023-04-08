@@ -1,7 +1,13 @@
 # Ignora archivos del sistema Mac 
 .DS_store
 
-#Ignora archicos configuracion Prepros
+#Ignora archivos configuracion Prepros
 prepros.config
 
-._app.sql
+#Ignora archivos de la carpeta
+/app/secciones/empleados/cv_empleados/*
+/app/secciones/empleados/fotos_empleados/*
+
+
+
+

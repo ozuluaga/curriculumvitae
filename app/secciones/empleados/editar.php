@@ -120,7 +120,8 @@ if ($_POST) {
     }
     //print_r($nombreArchivo_foto);
     //print_r($sentencia);
-    header("Location:index.php");
+    $mensaje = "Registro Actualizado";
+    header("Location:index.php?mensaje=" . $mensaje);
 }
 
 

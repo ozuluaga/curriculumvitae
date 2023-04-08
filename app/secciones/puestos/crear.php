@@ -12,7 +12,8 @@ if ($_POST) {
     // Asignando los valores que vienen del metodo POST
     $sentencia->bindParam(":nombredelpuesto", $nombredelpuesto);
     $sentencia->execute();
-    header("Location:index.php");
+    $mensaje = "Resgistro Creado"; //Asigno mensaje
+    header("Location:index.php?mensaje=" . $mensaje); //redirecciono y envio variable por url con el mensaje 
 }
 
 ?>

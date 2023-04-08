@@ -16,7 +16,9 @@ if ($_POST) {
     $sentencia->bindParam(":correo", $correo);
     $sentencia->bindParam(":pass", $pass);
     $sentencia->execute();
-    header("Location:index.php");
+    //header("Location:index.php");
+    $mensaje = "Registro Creado";
+    header("Location:index.php?mensaje=" . $mensaje);
 }
 
 ?>

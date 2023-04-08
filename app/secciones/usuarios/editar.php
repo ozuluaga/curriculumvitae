@@ -31,7 +31,9 @@ if ($_POST) {
     $sentencia->bindParam(":pass", $pass);
     $sentencia->bindParam(":id", $txtId);
     $sentencia->execute();
-    header("Location:index.php");
+    //header("Location:index.php");
+    $mensaje = "Registro Actualizado";
+    header("Location:index.php?mensaje=" . $mensaje);
 }
 
 

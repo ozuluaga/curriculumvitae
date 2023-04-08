@@ -33,7 +33,9 @@ if (isset($_GET['txtId'])) {
     $sentencia = $conexion->prepare("DELETE FROM tbl_empleados WHERE id=:id");
     $sentencia->bindParam(":id", $txtId);
     $sentencia->execute();
-    header("Location:index.php");
+
+    $mensaje = "Registro Eliminado";
+    header("Location:index.php?mensaje=" . $mensaje);
 }
 
 
@@ -58,7 +60,7 @@ $lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <div class="card-body">
         <div class="table-responsive-sm">
-            <table class="table">
+            <table class="table" id="tabla_id">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -87,13 +89,17 @@ $lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
 
                             </td>
-                            <td><?php echo $registro['cv'] ?></td>
+                            <td>
+                                <a href="<?php echo $registro['cv'] ?>">
+                                    <?php echo $registro['cv'] ?>
+                                </a>
+                            </td>
                             <td><?php echo $registro['puesto'] ?></td>
                             <td><?php echo $registro['fecha_ingreso'] ?></td>
                             <td>
-                                <a class="btn btn-primary" href="editar.php?txtId= <?php echo $registro['id']; ?>" role="button">Carta</a>
+                                <a class="btn btn-primary" href="carta_recomendacion.php?txtId= <?php echo $registro['id']; ?>" role="button" target="_blank">Carta</a>
                                 <a class="btn btn-info" href="editar.php?txtId= <?php echo $registro['id']; ?>" role="button">Editar</a>
-                                <a class="btn btn-danger" href="index.php?txtId= <?php echo $registro['id']; ?>" role="button">Eliminar</a>
+                                <a class="btn btn-danger" href="javascript:borrar( <?php echo $registro['id']; ?>);" role="button">Eliminar</a>
                             </td>
 
 
@@ -103,6 +109,7 @@ $lista_tbl_empleados = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
                 </tbody>
             </table>
+
         </div>
 
 
